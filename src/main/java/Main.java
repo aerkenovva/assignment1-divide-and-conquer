@@ -11,7 +11,7 @@ public class Main {
                 4, 16, 9, 15, 11
         };
 
-        MergeSorter sorter = new MergeSorter();
+        QuickSorter sorter = new QuickSorter();
 
         System.out.println("Before:");
         System.out.println(Arrays.toString(array));
@@ -21,13 +21,9 @@ public class Main {
         System.out.println("After:");
         System.out.println(Arrays.toString(array));
 
+        System.out.println("Comparisons: " + sorter.getComparisons());
         System.out.println(
-                "Comparisons: " + sorter.getComparisons()
-        );
-
-        System.out.println(
-                "Max recursion depth: "
-                        + sorter.getMaxRecursionDepth()
+                "Max recursion depth: " + sorter.getMaxRecursionDepth()
         );
     }
 }
