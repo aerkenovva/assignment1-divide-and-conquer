@@ -1,33 +1,42 @@
-import java.util.Arrays;
-
 public class Main {
 
     public static void main(String[] args) {
 
-        int[] array = {
-                12, 3, 5, 7, 4,
-                19, 26, 1, 8, 15,
-                10, 6, 13, 2, 9
+        Point[] points = {
+                new Point(2, 3),
+                new Point(12, 30),
+                new Point(40, 50),
+                new Point(5, 1),
+                new Point(12, 10),
+                new Point(3, 4)
         };
 
-        int k = 5; // 0-based
+        ClosestPairSolver solver =
+                new ClosestPairSolver();
 
-        int[] check = array.clone();
-        Arrays.sort(check);
+        ClosestPairSolver.Result result =
+                solver.findClosestPair(points);
 
-        DeterministicSelector selector =
-                new DeterministicSelector();
-
-        int result = selector.select(array, k);
-
-        System.out.println("Selected: " + result);
-        System.out.println("Expected: " + check[k]);
         System.out.println(
-                "Comparisons: " + selector.getComparisons()
+                "Point 1: " + result.getFirst()
         );
+
+        System.out.println(
+                "Point 2: " + result.getSecond()
+        );
+
+        System.out.println(
+                "Distance: " + result.getDistance()
+        );
+
+        System.out.println(
+                "Distance comparisons: "
+                        + solver.getDistanceComparisons()
+        );
+
         System.out.println(
                 "Max recursion depth: "
-                        + selector.getMaxRecursionDepth()
+                        + solver.getMaxRecursionDepth()
         );
     }
 }
