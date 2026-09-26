@@ -11,13 +11,15 @@ This project implements and analyzes four divide-and-conquer algorithms in Java:
 
 The project measures execution time, maximum recursion depth, and algorithm-specific operation counts. Experimental results are stored in CSV format and compared with theoretical complexity.
 
+Repository: https://github.com/aerkenovva/assignment1-divide-and-conquer
+
 ---
 
 ## B. Algorithm Analysis
 
 ### 1. Merge Sort
 
-Merge Sort recursively divides the array into two halves, sorts both halves, and combines them using a linear merge.
+Merge Sort recursively divides an array into two halves, sorts both halves, and combines them using a linear merge.
 
 Implementation features:
 
@@ -25,7 +27,7 @@ Implementation features:
 - Reusable auxiliary buffer
 - Insertion Sort cutoff for small subarrays
 - Comparison counting
-- Recursion-depth measurement
+- Maximum recursion-depth measurement
 
 Recurrence:
 
@@ -37,9 +39,9 @@ Using the Master Theorem:
 
 Time complexity:
 
-- Best: Θ(n log n)
-- Average: Θ(n log n)
-- Worst: Θ(n log n)
+- Best: `Θ(n log n)`
+- Average: `Θ(n log n)`
+- Worst: `Θ(n log n)`
 
 Space complexity:
 
@@ -51,11 +53,11 @@ Space complexity:
 
 Quick Sort selects a randomized pivot and partitions the array in place.
 
-This implementation uses three-way partitioning, which is especially useful when the input contains many duplicate values.
+The implementation uses three-way partitioning, which is useful for duplicate-heavy inputs because values smaller than, equal to, and greater than the pivot are grouped separately.
 
-It recursively processes only the smaller partition and iterates over the larger partition. This limits stack usage.
+The algorithm recursively processes only the smaller partition and handles the larger partition iteratively.
 
-Typical recurrence:
+General recurrence:
 
 `T(n) = T(k) + T(n-k-1) + Θ(n)`
 
@@ -69,34 +71,34 @@ Worst case:
 
 Time complexity:
 
-- Expected: Θ(n log n)
-- Worst: O(n²)
+- Expected: `Θ(n log n)`
+- Worst: `O(n²)`
 
-Typical recursion stack depth:
+Recursion stack depth:
 
-`O(log n)` because the algorithm recurses only on the smaller partition.
+`O(log n)` because recursion is applied only to the smaller partition.
 
 ---
 
 ### 3. Deterministic Select (Median of Medians)
 
-The algorithm finds the k-th smallest element without sorting the entire array.
+Deterministic Select finds the k-th smallest element without sorting the complete array.
 
 The implementation:
 
 - Divides elements into groups of 5
-- Sorts each small group
-- Finds group medians
+- Sorts each group
+- Finds the median of each group
 - Recursively selects the median of medians
-- Uses it as a pivot
+- Uses it as the pivot
 - Partitions the array in place
 - Recurses only into the partition containing the required element
 
-The recurrence can be described approximately as:
+Approximate recurrence:
 
 `T(n) ≤ T(n/5) + T(7n/10) + Θ(n)`
 
-Using divide-and-conquer / Akra-Bazzi intuition, the recursive subproblems shrink sufficiently while partitioning remains linear.
+Using divide-and-conquer and Akra-Bazzi intuition, the recursive subproblems shrink sufficiently while the partitioning work remains linear.
 
 Therefore:
 
@@ -110,15 +112,16 @@ Worst-case time complexity:
 
 ### 4. Closest Pair of Points
 
-The algorithm finds the two points with minimum Euclidean distance.
+The Closest Pair algorithm finds the two points with the minimum Euclidean distance.
 
 Steps:
 
 1. Sort points by x-coordinate and y-coordinate.
 2. Divide the points into left and right halves.
-3. Recursively find the closest pair in each half.
-4. Build a strip around the dividing line.
-5. Check possible closer pairs using y-order.
+3. Recursively find the closest pair in both halves.
+4. Choose the better of the two recursive results.
+5. Construct a strip around the dividing line.
+6. Check possible closer pairs using y-order.
 
 Recurrence:
 
@@ -128,7 +131,7 @@ Using the Master Theorem:
 
 `T(n) = Θ(n log n)`
 
-This is asymptotically faster than the brute-force approach:
+This is asymptotically faster than the brute-force solution:
 
 `Θ(n²)`
 
@@ -136,146 +139,180 @@ This is asymptotically faster than the brute-force approach:
 
 ## C. Experimental Results
 
-Experiments were performed using `System.nanoTime()`.
+Experiments were performed using Java's `System.nanoTime()`.
 
-Input sizes for array algorithms:
+### Input Sizes
 
-- 100
-- 1,000
-- 10,000
+Array algorithms were tested with:
 
-Sorting input types:
+- `n = 100`
+- `n = 1,000`
+- `n = 10,000`
 
-- Random
-- Sorted
-- Reverse-sorted
-- Duplicate-heavy
+Closest Pair was tested with:
 
-Closest Pair sizes:
+- `n = 100`
+- `n = 1,000`
+- `n = 5,000`
 
-- 100
-- 1,000
-- 5,000
+### Sorting Input Types
 
-Full results are available in:
+Merge Sort and Quick Sort were tested on:
+
+- Random input
+- Sorted input
+- Reverse-sorted input
+- Duplicate-heavy input
+
+### Measured Metrics
+
+The experiments recorded:
+
+- Execution time
+- Maximum recursion depth
+- Number of comparisons or distance comparisons
+
+The complete experimental dataset is available in:
 
 `results/results.csv`
 
-### Selected Random-Input Results
+### Selected Results from Random Inputs
 
 | Algorithm | n | Time (ns) | Max Recursion Depth | Metric |
 |---|---:|---:|---:|---:|
-| MergeSort | 100 | 32,958 | 4 | 658 comparisons |
-| MergeSort | 1,000 | 350,625 | 7 | 10,253 comparisons |
-| MergeSort | 10,000 | 1,051,916 | 11 | 126,847 comparisons |
-| QuickSort | 100 | 191,583 | 3 | 1,134 comparisons |
-| QuickSort | 1,000 | 953,958 | 6 | 19,796 comparisons |
-| QuickSort | 10,000 | 1,341,333 | 8 | 250,162 comparisons |
-| Deterministic Select | 100 | 50,958 | 7 | 789 comparisons |
-| Deterministic Select | 1,000 | 275,209 | 10 | 9,477 comparisons |
-| Deterministic Select | 10,000 | 1,034,583 | 12 | 96,699 comparisons |
-| Closest Pair | 100 | 3,460,166 | 7 | 136 distance comparisons |
-| Closest Pair | 1,000 | 5,423,833 | 10 | 1,146 distance comparisons |
-| Closest Pair | 5,000 | 15,659,250 | 12 | 6,419 distance comparisons |
+| MergeSort | 100 | 31,708 | 4 | 658 comparisons |
+| MergeSort | 1,000 | 340,500 | 7 | 10,253 comparisons |
+| MergeSort | 10,000 | 1,815,666 | 11 | 126,847 comparisons |
+| QuickSort | 100 | 187,584 | 4 | 1,280 comparisons |
+| QuickSort | 1,000 | 749,041 | 6 | 17,510 comparisons |
+| QuickSort | 10,000 | 1,674,375 | 8 | 255,520 comparisons |
+| Deterministic Select | 100 | 52,208 | 7 | 789 comparisons |
+| Deterministic Select | 1,000 | 275,500 | 10 | 9,477 comparisons |
 
-### Execution Time Plot
+Because execution time varies between runs, `results/results.csv` should be treated as the complete source of the final measured values.
 
-![Execution Time](docs/plots/time-vs-n.png)
+### Execution Time vs Input Size
 
-### Recursion Depth Plot
+![Execution Time vs Input Size](docs/plots/time-vs-n.png)
 
-![Recursion Depth](docs/plots/recursion-depth-vs-n.png)
+### Recursion Depth vs Input Size
+
+![Recursion Depth vs Input Size](docs/plots/recursion-depth-vs-n.png)
+
+### Experimental Results Preview
+
+![Results Preview](docs/screenshots/results-preview.png)
 
 ---
 
 ## D. Discussion
 
-### Do the experimental results match theoretical complexity?
+### Do the results match theoretical complexity?
 
-In general, the operation counts and recursion-depth growth are consistent with the expected theoretical behavior.
+Overall, the results are consistent with the expected theoretical behavior.
 
-Merge Sort recursion depth grows logarithmically as the input size increases.
+Merge Sort shows logarithmic growth in recursion depth while its operation count grows approximately according to `n log n`.
 
-Quick Sort also maintains relatively low recursion depth because the implementation recursively processes only the smaller partition.
+Quick Sort also maintains low recursion depth because only the smaller partition is processed recursively.
 
-Deterministic Select shows approximately linear growth in the number of comparisons as the input size increases.
+Deterministic Select shows approximately linear growth in its comparison count as input size increases.
 
-Closest Pair performs much fewer pair comparisons than a brute-force `O(n²)` solution would require for large inputs.
+Closest Pair performs substantially fewer distance comparisons than an `O(n²)` brute-force method would require for large datasets.
 
-Execution time does not perfectly follow theoretical complexity because actual timing is affected by JVM warm-up, JIT compilation, memory allocation, caching, garbage collection, and system activity.
+Execution time does not perfectly follow theoretical complexity because practical measurements are affected by JVM behavior and the execution environment.
+
+---
 
 ### How does input structure affect performance?
 
-Merge Sort has similar asymptotic complexity for all input structures, although the number of comparisons and practical execution time can vary.
+Merge Sort retains `Θ(n log n)` asymptotic complexity regardless of input ordering, although the actual number of comparisons and execution time may vary.
 
-Randomized Quick Sort reduces dependence on the original ordering of the input because the pivot is selected randomly.
+Randomized Quick Sort reduces dependence on the original ordering because the pivot is selected randomly.
 
-Duplicate-heavy input performs particularly well with the implemented three-way partitioning because elements equal to the pivot are grouped together.
+Duplicate-heavy input can perform particularly well with three-way partitioning because all elements equal to the pivot are handled together and do not need to appear in future recursive partitions.
+
+---
 
 ### Why does smaller-first recursion help QuickSort?
 
-After partitioning, the implementation recursively processes the smaller partition and handles the larger partition iteratively.
+After partitioning, the implementation recursively processes the smaller partition and handles the larger partition using iteration.
 
-Because the recursively processed partition is at most a fraction of the previous problem, the recursion stack remains bounded by approximately `O(log n)` even when partitions are unbalanced.
+The recursively processed partition can contain at most about half of the current elements.
 
-This reduces the risk of `StackOverflowError` on the JVM.
+Therefore, the recursive call stack remains bounded by approximately:
+
+`O(log n)`
+
+This reduces stack usage and the risk of `StackOverflowError` on the JVM.
+
+---
 
 ### Why does Median of Medians guarantee O(n)?
 
-Median of Medians chooses a pivot that guarantees that a significant fraction of elements can be discarded after every partition.
+Median of Medians chooses a pivot that guarantees that a significant fraction of elements can be discarded after each partition.
 
-Therefore, the recursive problem size decreases sufficiently at every step.
-
-The recurrence
+The recurrence can be represented as:
 
 `T(n) ≤ T(n/5) + T(7n/10) + Θ(n)`
 
-has a linear solution:
+The recursive subproblems together remain sufficiently smaller than the original problem, while the remaining work is linear.
 
-`Θ(n)`.
+Therefore:
+
+`T(n) = Θ(n)`
+
+in the worst case.
+
+---
 
 ### Why is divide-and-conquer Closest Pair faster than O(n²)?
 
-The brute-force method compares every pair of points.
-
-Divide-and-conquer eliminates most pair comparisons by solving two smaller subproblems and checking only a narrow strip near the dividing line.
-
-This reduces the running time from:
+A brute-force algorithm compares every pair of points, requiring:
 
 `Θ(n²)`
 
-to:
+comparisons.
 
-`Θ(n log n)`.
+The divide-and-conquer solution recursively solves two smaller problems and only checks points inside a narrow strip around the dividing line.
 
-### Practical performance factors
+This reduces the total complexity to:
 
-Measured running time may be affected by:
+`Θ(n log n)`
 
-- JVM JIT compilation
+which becomes significantly more efficient as the dataset grows.
+
+---
+
+### Practical Performance Factors
+
+Real execution time can be influenced by:
+
 - JVM warm-up
+- JIT compilation
 - Garbage collection
 - CPU cache behavior
 - Memory allocation
 - Branch prediction
-- Background operating-system processes
-- Random pivot selection
+- Background operating-system activity
+- Random pivot selection in Quick Sort
 
-Because of these factors, a single timing measurement should not be interpreted as an exact representation of asymptotic complexity.
+For this reason, a single execution-time measurement should not be interpreted as an exact representation of asymptotic complexity.
 
 ---
 
 ## E. Reflection
 
-This assignment helped me understand how divide-and-conquer algorithms behave both theoretically and practically. Implementing the algorithms made recurrence relations and recursion depth easier to understand because I could observe how the problem size decreases during execution.
+This assignment helped me understand how divide-and-conquer algorithms behave both theoretically and practically. Implementing the algorithms made recurrence relations, recursive decomposition, and recursion depth easier to understand because I could observe how problem sizes decrease during execution.
 
-One of the main challenges was implementing the algorithms in a way that satisfies both correctness and performance requirements. In particular, smaller-first recursion in Quick Sort, the Median-of-Medians pivot selection, and the strip step in Closest Pair required careful implementation. The experiments also showed that practical JVM execution time can vary even when the theoretical complexity remains the same.
+One of the main challenges was implementing the algorithms while satisfying both correctness and performance requirements. In particular, smaller-first recursion in Quick Sort, Median-of-Medians pivot selection, and the strip step in Closest Pair required careful implementation. The experiments also demonstrated that practical JVM execution time can vary even when the theoretical complexity remains unchanged.
 
 ---
 
 ## F. Testing
 
-Merge Sort and Quick Sort were compared against Java's `Arrays.sort()`.
+### Merge Sort and Quick Sort
+
+Both sorting algorithms were compared against Java's `Arrays.sort()`.
 
 The tests included:
 
@@ -286,15 +323,27 @@ The tests included:
 - Empty arrays
 - Single-element arrays
 
-Deterministic Select was verified using 100 random tests by comparing its result with the corresponding element in a sorted copy of the array.
+### Deterministic Select
 
-Closest Pair was compared with a brute-force implementation on small random datasets.
+Deterministic Select was verified using at least 100 random tests.
+
+For each test, the selected element was compared with:
+
+`Arrays.sort(array)[k]`
+
+### Closest Pair
+
+The divide-and-conquer solution was compared with an `O(n²)` brute-force implementation on small random datasets.
 
 All implemented correctness tests passed.
 
 ### Test Results
 
 ![Test Results](docs/screenshots/test-results.png)
+
+### Program Output
+
+![Program Output](docs/screenshots/program-output.png)
 
 ---
 
@@ -305,12 +354,43 @@ assignment1-divide-and-conquer/
 ├── src/
 │   ├── main/
 │   │   └── java/
+│   │       ├── MergeSorter.java
+│   │       ├── QuickSorter.java
+│   │       ├── DeterministicSelector.java
+│   │       ├── ClosestPairSolver.java
+│   │       ├── Experiment.java
+│   │       ├── Point.java
+│   │       └── Main.java
 │   └── test/
+│       └── java/
+│           └── AlgorithmTests.java
 ├── docs/
 │   ├── screenshots/
+│   │   ├── program-output.png
+│   │   ├── results-preview.png
+│   │   └── test-results.png
 │   └── plots/
+│       ├── time-vs-n.png
+│       └── recursion-depth-vs-n.png
 ├── results/
 │   └── results.csv
 ├── README.md
 ├── pom.xml
 └── .gitignore
+```
+
+---
+
+## Technologies
+
+- Java 17
+- Maven
+- IntelliJ IDEA
+- Git
+- GitHub
+
+---
+
+## AI Usage Disclosure
+
+AI assistance was used for explanations, debugging guidance, code review, and documentation support. All implementations were tested and reviewed as part of the assignment work.
